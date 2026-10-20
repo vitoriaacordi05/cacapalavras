@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f4ec">
+    <meta name="description" content="Descubra a palavra do dia em seis tentativas ou pratique sem limite.">
+    <title>Palavra — um desafio por dia</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" type="module"></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="Palavra, início">
+          <span class="brand-mark" aria-hidden="true">P</span>
+          <span class="brand-copy">
+            <span class="brand-name">PALAVRA</span>
+            <span class="brand-subtitle">um desafio por dia</span>
+          </span>
+        </a>
+        <nav class="header-actions" aria-label="Ajuda e estatísticas">
+          <a class="quiet-button" href="#como-jogar">Como jogar</a>
+          <a class="quiet-button" href="#estatisticas">Estatísticas</a>
+        </nav>
+      </header>
+
+      <section class="game-layout" aria-label="Jogo de adivinhação">
+        <section class="play-area" aria-labelledby="game-title">
+          <div class="game-heading">
+            <div>
+              <p class="eyebrow" id="game-date">CARREGANDO DESAFIO</p>
+              <h1 id="game-title">Desafio de hoje</h1>
+            </div>
+            <p class="attempt-count" id="attempt-count" aria-live="polite">— de 6</p>
+          </div>
+
+          <div class="mode-switch" role="group" aria-label="Modo de jogo">
+            <button class="mode-button" type="button" data-mode="daily" aria-pressed="true">Desafio diário</button>
+            <button class="mode-button" type="button" data-mode="practice" aria-pressed="false">Prática</button>
+          </div>
+
+          <div class="board" id="board" role="grid" aria-label="Tabuleiro com seis tentativas e cinco letras por tentativa"></div>
+          <ul class="legend" aria-label="Legenda do feedback">
+            <li><span class="legend-mark correct" aria-hidden="true">✓</span><span>correta</span></li>
+            <li><span class="legend-mark present" aria-hidden="true">↗</span><span>presente</span></li>
+            <li><span class="legend-mark absent" aria-hidden="true">×</span><span>ausente</span></li>
+          </ul>
+
+          <form class="guess-form" id="guess-form" novalidate>
+            <label class="visually-hidden" for="guess-input">Digite uma palavra de cinco letras</label>
+            <input
+              id="guess-input"
+              name="guess"
+              type="text"
+              maxlength="10"
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+              placeholder="Sua próxima palavra"
+              aria-describedby="guess-message accent-instructions"
+              aria-label="Digite uma palavra de cinco letras"
+            >
+            <button class="primary-button" type="submit">Enviar</button>
+          </form>
+          <p class="message" id="guess-message" aria-live="polite" aria-atomic="true"></p>
+
+          <div class="accent-tools">
+            <p class="visually-hidden" id="accent-instructions">Para inserir letras acentuadas, use o teclado do dispositivo ou abra o seletor de acentos.</p>
+            <button
+              class="text-button"
+              id="accent-toggle"
+              type="button"
+              aria-expanded="false"
+              aria-controls="accent-keys"
+            >Inserir acentos</button>
+            <div class="accent-keys" id="accent-keys" aria-label="Letras acentuadas" hidden></div>
+          </div>
+
+          <div class="keyboard" id="keyboard" aria-label="Teclado virtual"></div>
+          <p class="keyboard-hint">Você também pode digitar pelo teclado do dispositivo.</p>
+        </section>
+
+        <aside class="side-info">
+          <section class="side-card" id="estatisticas" aria-labelledby="stats-title">
+            <div class="card-heading">
+              <h2 id="stats-title">Suas estatísticas</h2>
+              <span class="stats-mode" id="stats-mode">DESAFIO DIÁRIO</span>
+            </div>
+            <dl class="stats-grid">
+              <div><dt>Jogos</dt><dd id="stat-games">0</dd></div>
+              <div><dt>Vitórias</dt><dd id="stat-wins">0</dd></div>
+              <div><dt>Acertos</dt><dd id="stat-rate">0%</dd></div>
+              <div><dt>Sequência</dt><dd id="stat-streak">0</dd></div>
+              <div><dt>Melhor sequência</dt><dd id="stat-best-streak">0</dd></div>
+            </dl>
+            <h3 class="distribution-title">Vitórias por tentativa</h3>
+            <ol class="distribution" id="distribution" aria-label="Distribuição de vitórias por tentativa"></ol>
+          </section>
+
+          <section class="side-card help-card" id="como-jogar" aria-labelledby="help-title">
+            <h2 id="help-title">Como jogar</h2>
+            <p>Adivinhe a palavra de cinco letras em até seis tentativas. Depois de cada palpite, você recebe pistas sobre as letras.</p>
+            <ul>
+              <li><strong>Correta:</strong> está na posição certa.</li>
+              <li><strong>Presente:</strong> aparece em outra posição.</li>
+              <li><strong>Ausente:</strong> não aparece na palavra.</li>
+            </ul>
+            <p>Acentos contam: <strong>Á</strong> e <strong>A</strong> são letras diferentes. O desafio diário é igual para todos; a prática não tem limite.</p>
+          </section>
+
+          <section class="side-card result-card" id="result-card" aria-labelledby="result-title" hidden>
+            <h2 id="result-title">Resultado</h2>
+            <p id="result-message"></p>
+            <button class="share-button" id="share-button" type="button">Compartilhar resultado</button>
+            <div id="share-fallback" class="share-fallback" hidden>
+              <label for="share-text">Resultado sem a resposta — copie este texto:</label>
+              <textarea id="share-text" rows="5" readonly></textarea>
+            </div>
+          </section>
+
+          <section class="side-card practice-card" id="practice-card" hidden>
+            <h2>Prática</h2>
+            <p>Treine sem limite. Suas estatísticas de prática ficam separadas do desafio diário.</p>
+            <button class="primary-button" id="new-practice" type="button">Nova palavra</button>
+          </section>
+        </aside>
+      </section>
+      <footer class="site-footer">
+        <span>Um passatempo de palavras, sem pressa.</span>
+        <span>Seu progresso fica neste navegador.</span>
+      </footer>
+    </main>
+  </body>
+</html>
